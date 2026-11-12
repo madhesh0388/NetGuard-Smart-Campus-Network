@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NetGuard | Campus Network Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">N</div><div><b>NETGUARD</b><small>CAMPUS NETWORK OPS</small></div></div>
+    <div class="nav-label">WORKSPACE</div>
+    <button class="nav active" data-page="overview"><span>◫</span> Command Center</button>
+    <button class="nav" data-page="topology"><span>⌘</span> Network Digital Twin</button>
+    <button class="nav" data-page="load"><span>◒</span> Load Management</button>
+    <button class="nav" data-page="faults"><span>⚠</span> Fault Management <i id="faultBadge">0</i></button>
+    <div class="nav-label">INTELLIGENCE</div>
+    <button class="nav" data-page="root"><span>⌕</span> Root Cause Analysis</button>
+    <button class="nav" data-page="heatmap"><span>▦</span> Department Heatmap</button>
+    <button class="nav" data-page="balancing"><span>⇄</span> Smart Load Balancing</button>
+    <button class="nav" data-page="risk"><span>◉</span> Early Warning & Risk</button>
+    <div class="nav-label">AUTOMATION & INSIGHTS</div>
+    <button class="nav" data-page="recovery"><span>↻</span> Recovery Center</button>
+    <button class="nav" data-page="failover"><span>⇢</span> Smart Failover</button>
+    <button class="nav" data-page="priority"><span>☆</span> Priority Allocation</button>
+    <button class="nav" data-page="incidents"><span>◷</span> Incident Replay</button>
+    <button class="nav" data-page="whatif"><span>⚗</span> What-If Simulator</button>
+    <button class="nav" data-page="reports"><span>▤</span> Reports</button>
+    <div class="sidebar-bottom"><div class="live-dot"></div><div><b>Simulation environment</b><small>Local demo mode</small></div></div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div><div class="eyebrow">NETWORK OPERATIONS / <span id="crumb">OVERVIEW</span></div><h1 id="pageTitle">Campus Network Command Center</h1></div>
+      <div class="top-actions"><span class="system-status"><i></i> SYSTEM ONLINE</span><button class="icon-btn" title="Notifications">♧</button><div class="avatar">AD</div></div>
+    </header>
+    <section class="toolbar"><div class="toolbar-left"><span class="pulse"></span><span id="simStatus">Simulation paused</span><span class="muted">·</span><span class="muted">Updated <b id="updated">--:--:--</b></span></div><div class="toolbar-right"><button class="btn btn-ghost" id="resetBtn">↺ Reset</button><button class="btn btn-ghost" id="stopBtn">Ⅱ Stop</button><button class="btn btn-primary" id="startBtn">▶ Start simulation</button></div></section>
+
+    <section class="page active" id="page-overview">
+      <div class="welcome"><div><div class="eyebrow cyan">LIVE CAMPUS INFRASTRUCTURE</div><h2>Network intelligence, <em>in one place.</em></h2><p>Monitor campus connectivity, understand emerging issues and simulate recovery actions.</p></div><div class="welcome-chip"><span>◈</span><div><b>DEMO ENVIRONMENT</b><small>All network metrics are simulated</small></div></div></div>
+      <div class="stat-grid">
+        <article class="stat-card"><div class="stat-top"><span>Total devices</span><span class="stat-icon blue">⌘</span></div><strong id="totalDevices">12</strong><small>Across campus infrastructure</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Online devices</span><span class="stat-icon green">✓</span></div><strong id="onlineDevices">12</strong><small><b class="green-text">● Healthy</b> device connectivity</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Average network load</span><span class="stat-icon purple">◒</span></div><strong id="avgLoad">48<small>%</small></strong><small>Campus-wide utilization</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Active faults</span><span class="stat-icon orange">⚠</span></div><strong id="activeFaults">0</strong><small>Requires administrator review</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Network risk score</span><span class="stat-icon red">◎</span></div><strong id="riskScore">18<small>/100</small></strong><small id="riskLabel">Low overall risk</small></article>
+      </div>
+      <div class="content-grid">
+        <article class="panel span-2"><div class="panel-head"><div><h3>Campus network topology</h3><p>Interactive infrastructure overview</p></div><button class="text-btn" data-goto="topology">Open digital twin ↗</button></div><div class="topology-mini" id="miniTopology"></div><div class="legend"><span><i class="lg green"></i> Online</span><span><i class="lg orange"></i> Warning</span><span><i class="lg red"></i> Offline</span><span><i class="lg blue"></i> Network link</span></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>Network health</h3><p>Composite risk indicator</p></div><span class="tag tag-green">LIVE</span></div><div class="health-wrap"><div class="health-ring" id="healthRing"><div><b id="healthValue">82</b><small>HEALTH</small></div></div></div><div class="health-meta"><span>Availability</span><b id="availability">100%</b></div><div class="health-meta"><span>Critical devices</span><b id="criticalDevices">0</b></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>Bandwidth trend</h3><p>Recent utilization (%)</p></div><span class="tag">SIMULATED</span></div><div class="chart-box"><canvas id="trafficChart"></canvas></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>Department load</h3><p>Average utilization by zone</p></div><button class="text-btn" data-goto="heatmap">View heatmap ↗</button></div><div id="departmentBars" class="department-bars"></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>Recent activity</h3><p>Latest network events</p></div><button class="text-btn" data-goto="incidents">View timeline ↗</button></div><div class="activity-list" id="activityList"></div></article>
+      </div>
+    </section>
+
+    <section class="page" id="page-topology"><div class="section-intro"><div><h2>Network Digital Twin</h2><p>Explore the simulated campus network and inspect device dependencies.</p></div><button class="btn btn-danger" id="injectBtn">⚡ Inject demo fault</button></div><div class="panel"><div class="panel-head"><div><h3>Infrastructure map</h3><p>Select a node to inspect device status and metrics.</p></div><span class="tag tag-blue">12 NODES</span></div><div id="fullTopology" class="full-topology"></div></div><div class="panel"><div class="panel-head"><div><h3>Device inventory</h3><p>Current device health and utilization</p></div><input class="search" id="deviceSearch" placeholder="Search devices…"></div><div class="table-wrap"><table><thead><tr><th>DEVICE</th><th>TYPE</th><th>DEPARTMENT</th><th>STATUS</th><th>LOAD</th><th>LATENCY</th></tr></thead><tbody id="deviceTable"></tbody></table></div></div></section>
+
+    <section class="page" id="page-load"><div class="section-intro"><div><h2>Load Management</h2><p>Monitor utilization and test traffic redistribution across campus paths.</p></div><button class="btn btn-primary" id="balanceBtn">⇄ Simulate load balancing</button></div><div class="stat-grid compact"><article class="stat-card"><span>Average load</span><strong id="loadAvg">--%</strong></article><article class="stat-card"><span>Highest device load</span><strong id="highestLoad">--%</strong></article><article class="stat-card"><span>Congested devices</span><strong id="congested">0</strong></article></div><div class="panel"><div class="panel-head"><div><h3>Device-wise bandwidth utilization</h3><p>Thresholds: normal ≤50%, moderate 51–70%, high 71–85%, critical ≥86%</p></div><span class="tag">LIVE METRICS</span></div><div id="loadRows" class="load-rows"></div></div><div class="panel" id="balanceResult"><h3>Load balancing recommendation</h3><p class="muted">Run the simulator to compare current traffic distribution with a proposed alternative.</p></div></section>
+
+    <section class="page" id="page-faults"><div class="section-intro"><div><h2>Fault Management</h2><p>Threshold-based fault detection, severity classification and incident handling.</p></div><button class="btn btn-danger" id="faultInject2">+ Inject sample fault</button></div><div id="faultCards" class="fault-list"></div></section>
+    <section class="page" id="page-root"><div class="section-intro"><div><h2>Root Cause Analysis</h2><p>Correlate device dependencies to distinguish root failures from downstream symptoms.</p></div><span class="tag tag-blue">RULE-BASED ENGINE</span></div><div class="panel" id="rootContent"></div></section>
+    <section class="page" id="page-heatmap"><div class="section-intro"><div><h2>Department Congestion Heatmap</h2><p>Compare simulated network demand across campus zones.</p></div><span class="tag">CAMPUS ZONES</span></div><div class="heat-grid" id="heatGrid"></div></section>
+    <section class="page" id="page-balancing"><div class="section-intro"><div><h2>Smart Load Balancing</h2><p>Model traffic redistribution from a busy device toward a lower-utilization device.</p></div><button class="btn btn-primary" id="balanceBtn2">Run balancing simulation</button></div><div class="panel" id="balanceResult2"><h3>Traffic path optimizer</h3><p class="muted">The simulation recommends a redistribution based on current device utilization.</p></div></section>
+    <section class="page" id="page-risk"><div class="section-intro"><div><h2>Early Warning & Risk</h2><p>Rule-based risk scoring from bandwidth, latency, packet loss and device availability.</p></div><span class="tag tag-purple">NO MACHINE LEARNING</span></div><div class="panel"><div class="panel-head"><div><h3>Device risk assessment</h3><p>Scores are indicative simulation outputs.</p></div></div><div id="riskRows" class="load-rows"></div></div></section>
+    <section class="page" id="page-recovery"><div class="section-intro"><div><h2>Recovery Center</h2><p>Test safe, simulated recovery actions for offline devices.</p></div></div><div class="panel"><div class="notice">Demo safety: recovery actions change only this local simulation. No physical network devices are configured.</div><div id="recoveryRows" class="load-rows"></div></div></section>
+    <section class="page" id="page-failover"><div class="section-intro"><div><h2>Smart Failover</h2><p>Model a backup path selection when the primary route is unavailable.</p></div><button class="btn btn-primary" id="failoverBtn">⇢ Activate simulated backup path</button></div><div class="panel" id="failoverResult"><div class="path-visual"><div class="path-node">PRIMARY<br><b>Core Router → SW-A</b></div><div class="path-arrow">→</div><div class="path-node backup">BACKUP<br><b>Core Router → SW-B</b></div></div><p class="muted">Failover is simulated for demonstration; no real routing configuration is changed.</p></div></section>
+    <section class="page" id="page-priority"><div class="section-intro"><div><h2>Priority-Based Allocation</h2><p>Model application-aware bandwidth priorities during periods of congestion.</p></div></div><div class="panel"><div class="form-row"><label>Service<select id="priorityService"><option>Online Examinations</option><option>College ERP</option><option>Academic Servers</option><option>Video Classes</option><option>Student Browsing</option><option>Guest Wi-Fi</option></select></label><label>Priority<select id="priorityLevel"><option>Critical</option><option>High</option><option>Normal</option><option>Low</option></select></label><button class="btn btn-primary" id="priorityBtn">Apply simulated priority</button></div><div id="priorityResult" class="result-box">Choose a service and apply a simulated priority policy.</div></div></section>
+    <section class="page" id="page-incidents"><div class="section-intro"><div><h2>Incident Timeline Replay</h2><p>Review events generated during the simulation and recovery workflow.</p></div><button class="btn btn-ghost" id="refreshHistory">↻ Refresh history</button></div><div class="panel"><div id="timeline" class="timeline"></div></div><div class="panel"><h3>Recovery history</h3><div id="recoveryHistory"></div></div></section>
+    <section class="page" id="page-whatif"><div class="section-intro"><div><h2>What-If Network Simulator</h2><p>Explore possible campus network outcomes before making infrastructure decisions.</p></div><span class="tag tag-purple">SCENARIO LAB</span></div><div class="scenario-grid"><button class="scenario" data-scenario="Core router failure"><span>01</span><b>Core router failure</b><small>Test upstream dependency impact</small></button><button class="scenario" data-scenario="Traffic increases by 50%"><span>02</span><b>Traffic increases by 50%</b><small>Evaluate congestion exposure</small></button><button class="scenario" data-scenario="New computer lab added"><span>03</span><b>New computer lab added</b><small>Review capacity requirements</small></button><button class="scenario" data-scenario="Backup path unavailable"><span>04</span><b>Backup path unavailable</b><small>Evaluate resilience</small></button><button class="scenario" data-scenario="Primary server failure"><span>05</span><b>Primary server failure</b><small>Check academic service impact</small></button></div><div class="panel" id="scenarioResult"><h3>Scenario results</h3><p class="muted">Select a scenario to calculate its simulated impact.</p></div></section>
+    <section class="page" id="page-reports"><div class="section-intro"><div><h2>Analytics & Reports</h2><p>Export the current simulated device inventory for your hackathon demonstration.</p></div><a class="btn btn-primary" href="/api/report.csv">↓ Download CSV report</a></div><div class="panel"><h3>Report contents</h3><p class="muted">Device ID, device name, department, status, bandwidth utilization, latency and packet loss.</p><div class="report-preview"><div><b>12</b><small>Sample devices</small></div><div><b>8</b><small>Campus zones / services</small></div><div><b>CSV</b><small>Export format</small></div></div></div></section>
+    <footer>NETGUARD <span>·</span> Smart Campus Network Management <span>·</span> Simulation prototype</footer>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<div class="modal-backdrop" id="deviceModal"><div class="modal"><button class="modal-close" id="modalClose">×</button><div id="modalContent"></div></div></div>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body></html>
